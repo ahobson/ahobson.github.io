@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>atl-clj core.typed</title>
+    <meta charset='utf-8'>
+    <meta content='width=1024, user-scalable=no' name='viewport'>
+    <!-- deck.js's core css -->
+    <link href="deck.js/core/deck.core.css" rel="stylesheet" type="text/css"/>
+    <!-- deck.js extension CSS files -->
+    <link href="deck.js/extensions/codemirror/deck.codemirror.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/goto/deck.goto.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/hash/deck.hash.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/menu/deck.menu.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/navigation/deck.navigation.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/scale/deck.scale.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/status/deck.status.css" rel="stylesheet" type="text/css"/>
+    <!-- all css in the css dir: Keydown CSS, your custom CSS, and themes from deck.js -->
+    <link href="css/keydown.css" rel="stylesheet" type="text/css"/>
+    <link href="css/custom.css" rel="stylesheet" type="text/css"/>
+    <link href="css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="css/doc.css" rel="stylesheet" type="text/css"/>
+    <link href="css/horizontal-slide.css" rel="stylesheet" type="text/css"/>
+    <link href="css/swiss.css" rel="stylesheet" type="text/css"/>
+    <!-- Modernizr (provided for legacy browsers) -->
+    <script src="deck.js/support/modernizr.custom.js" type="text/javascript"></script>
+  </head>
+  <body class='deck-container keydown'>
+    <section class='slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h1>atl-clj core.typed</h1>
+        
+        <h2>ahobson@gmail.com</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='ReesesCommercial full-background slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>You got types in my dynamic language</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>History</h2>
+        
+        <p><code>core.typed</code> started out as a thesis by Ambrose Bonnaire-Sergeant. He
+        has since crowdfunded development for another ~1 year of development.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left rimg slide tell'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Tell clojure about types</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Tell clojure about types</h3>
+        
+        <p><code>core.typed</code> is a type annotation system for clojure.</p>
+        
+        <p>Many of the examples here are stoled from the <code>core.typed</code> wiki.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Tell clojure about types</h3>
+        
+        <p><code>core.typed</code> is heavily influenced by Typed Racket, a variation of
+        Racket (PLT Scheme).</p>
+        
+        <p>Type checking is still optional and separate from compilation.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left rimg slide youresovain'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Annotation is better!</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Annotation is better!</h3>
+        
+        <p>The <code>core.typed</code> position is that annotating clojure code with type
+        information provides:</p>
+        
+        <ul>
+        <li>Better error messages</li>
+        <li>Better documentation</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='center enter full-background slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Enter the repl!</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Enter the repl!</h3>
+        
+        <p>What does it look like to add type checking to clojure?</p>
+        
+        <p>The <code>cf</code> macro can be used from the repl. We have a file <code>example.clj</code>
+        that contains</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(ns example&#x000A;  (:use [clojure.core.typed]))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Enter the repl!</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>user=> (load-file "src/example.clj")&#x000A;#'example/my-pw-shell-count&#x000A;user=> (in-ns 'example)&#x000A;#<Namespace example>&#x000A;example=> (cf in-ns)&#x000A;Initializing core.typed ...&#x000A;Building core.typed base environments ...&#x000A;Finished building base environments&#x000A;"Elapsed time: 12262.626 msecs"&#x000A;core.typed initialized.&#x000A;(Fn [Symbol -> nil])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background left louielouie rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>What the @$%! does that mean?</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>What the @$%! does that mean?</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(Fn [Symbol -> nil])</textarea>
+    </p>
+        
+        <p>A function that takes a single argument of type <code>Symbol</code> and returns
+        type <code>nil</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left longcut rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>A brief digression into type theory</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>A brief digression into type theory</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf inc)&#x000A;(Fn [AnyInteger -> AnyInteger]&#x000A;    [java.lang.Number -> java.lang.Number])</textarea>
+    </p>
+        
+        <p>Arities are matched in order, so <code>AnyInteger</code> then <code>Number</code>. More
+        specific matches should be provided first.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>A brief digression into type theory</h3>
+        
+        <h4>Types of types</h4>
+        
+        <ul>
+        <li>Union Types</li>
+        <li>Option Types</li>
+        <li>Intersection Types</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left rimg slide union'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Union Type</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Union Type</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf name)&#x000A;(Fn [(U java.lang.String clojure.lang.Named) ->&#x000A;     java.lang.String])</textarea>
+    </p>
+        
+        <p>A function that takes either a <code>String</code> or a <code>Named</code> and returns a <code>String</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left option rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Option Type</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Option Type</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf namespace)&#x000A;(Fn [(U java.lang.String Symbol clojure.lang.Keyword) ->&#x000A;     (Option java.lang.String)])</textarea>
+    </p>
+        
+        <p><code>namespace</code> accepts an argument of type <code>String</code>, <code>Symbol</code>, or
+        <code>Keyword</code> and returns type <code>String</code> or <code>nil</code>. Same as</p>
+        
+        <p><code>(U java.lang.String nil)</code></p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background intersection left rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Intersection Type</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Intersection Type</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf supers)&#x000A;(Fn [java.lang.Class ->&#x000A;     (U (I (Set java.lang.Class)&#x000A;            NonEmptyCount) nil)])</textarea>
+    </p>
+        
+        <p><code>supers</code> accepts an argument of type <code>Class</code> and returns a either a
+        non empty <code>Set</code> of type <code>Class</code> or type <code>nil</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>How does annotation work?</h3>
+        
+        <p>Use the <code>clojure.core.typed/ann</code> macro to define the types used by a
+        function.</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf (ann my-name [(Option String)&#x000A;              -> (Option String)]))&#x000A;Any</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>How does annotation work?</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>[Type -> Type]</textarea>
+    </p>
+        
+        <p>and</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(Fn [Type -> Type])</textarea>
+    </p>
+        
+        <p>are equivalent.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>What does a type error look like in practice?</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf (ann my-name [(Option String)&#x000A;              -> (Option String)]))&#x000A;Any&#x000A;example> (cf (defn my-name [n] (name n)))&#x000A;Type Error (/blahblah.clj:1:23) Type mismatch:&#x000A;&#x000A;Expected: 	(U java.lang.String clojure.lang.Named)&#x000A;&#x000A;Actual: 	(Option java.lang.String)&#x000A;in: (name n)&#x000A;&#x000A;&#x000A;ExceptionInfo Type Checker: Found 1 error&#x000A;  clojure.core/ex-info (core.clj:4327)</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <p>Remember:
+        <textarea class='code' display='none' mode='clojure'>example> (cf name)&#x000A;(Fn [(U java.lang.String clojure.lang.Named) ->&#x000A;     java.lang.String])</textarea>
+    </p>
+        
+        <p>but we had
+        <textarea class='code' display='none' mode='clojure'>example> (cf (ann my-name [(Option String)&#x000A;              -> (Option String)]))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background left rimg safety slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <p><code>core.typed</code> prevented a <code>NPE</code>!</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left polymorphic rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Polymorphic functions</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Polymorphic functions</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf key)&#x000A;(All [x] (Fn [(clojure.lang.IMapEntry x Any) -> x]))</textarea>
+    </p>
+        
+        <p>For all types <code>x</code>, <code>key</code> takes an <code>IMapEntry</code> of <code>x</code> and <code>Any</code>
+        and returns type <code>x</code>.</p>
+        
+        <p>Analogous to <code>T</code> in Java's <code>List&lt;T&gt;</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background left longcut rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h4>Types of types</h4>
+        
+        <ul>
+        <li>Value Types</li>
+        <li>Filters</li>
+        <li>Occurance Typing</li>
+        <li>Recursive Types (I'm gonna skip this one)</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background left rimg slide zero'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Value Type</h3>
+        
+        <p><code>(Value 0)</code> means the literal value <code>0</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left more_than_types rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Filters</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Filters</h3>
+        
+        <p><code>core.typed</code> is more than just types. It also collects a filter set
+        for each expression: a true filter (<code>then</code>) and a false filter
+        (<code>else</code>).</p>
+        
+        <p>Filters are not usually written in normal code.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Filters</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf 1)&#x000A;[(Value 1) {:then tt, :else ff}]</textarea>
+    </p>
+        
+        <ul>
+        <li><code>tt</code> is the trivially true filter</li>
+        <li><code>ff</code> is the impossible filter</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Filters</h3>
+        
+        <p>Filters relate bindings to types.</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>example> (cf symbol?)&#x000A;(Fn [Any -> Boolean :filters {:then (is Symbol 0),&#x000A;                              :else (! Symbol 0)}])</textarea>
+    
+        In the form <code>is Symbol 0</code>, the <code>0</code> is the first argument to the
+        function. If the expression is true, the first argument has type
+        <code>Symbol</code>.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left occurance rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Occurance Typing</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Occurance Typing</h3>
+        
+        <p><code>core.typed</code> examines the control flow and annotates with filters.</p>
+        
+        <p>We had:
+        <textarea class='code' display='none' mode='clojure'>example> (cf (ann my-name [(Option String)&#x000A;              -> (Option String)]))</textarea>
+    
+        Let us try:
+        <textarea class='code' display='none' mode='clojure'>example> (cf (defn my-name [n] (if n (name n))))&#x000A;(Var (Fn [(Option java.lang.String)&#x000A;           -> (Option java.lang.String)])&#x000A;     (Fn [(Option java.lang.String)&#x000A;           -> (Option java.lang.String)]))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Occurance Typing</h3>
+        
+        <p>Assertions also work
+        <textarea class='code' display='none' mode='clojure'>example> (cf namespace)&#x000A;(Fn [(U java.lang.String Symbol clojure.lang.Keyword)&#x000A;     -> (Option java.lang.String)])&#x000A;example> (cf (ann my-namespace [-> String]))&#x000A;Any&#x000A;example> (cf (defn my-namespace []&#x000A;  (let [ns (namespace 'clojure.core/def)]&#x000A;    (assert ns)&#x000A;    ns)))&#x000A;(Var (Fn [-> java.lang.String])&#x000A;     (Fn [-> java.lang.String]))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left maps rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Heterogenous Maps</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Heterogenous Maps</h3>
+        
+        <p>A map with keyword keys</p>
+        
+        <ul>
+        <li><code>:mandatory</code> keys</li>
+        <li><code>:optional</code> keys</li>
+        <li><code>:absent</code> keys</li>
+        <li><code>complete?</code> specification</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Heterogenous Maps</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(ann my-proxy-settings&#x000A;    (HMap :mandatory {:host String}&#x000A;          :optional {:port Number&#x000A;                     :user String&#x000A;                     :pass String}&#x000A;          :absent-keys #{:url}&#x000A;          :complete? true))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left practical rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Practical use</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Practical use</h3>
+        
+        <ul>
+        <li>All vars and functions must be annotated</li>
+        <li>Use the <code>:no-check</code> metadata to tell <code>core.typed</code> to ignore the var
+        definition</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Practical use</h3>
+        
+        <ul>
+        <li>Anonymous functions must be annotated with <code>fn&gt;</code> or <code>ann-form</code></li>
+        <li><code>ann-form</code> is more expressive and similar to what we have already
+        shown, so that is what I will use</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Practical use</h3>
+        
+        <p>Unfortunately, not all core functions are annotated.</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>user=> (cf frequencies)&#x000A;Type Error (/blahblah.clj)&#x000A;  Unannotated var clojure.core/frequencies&#x000A;Hint: Add the annotation for&#x000A;  clojure.core/frequencies via check-ns or cf&#x000A;in: frequencies&#x000A;&#x000A;ExceptionInfo Type Checker: Found 1 error&#x000A;  clojure.core/ex-info (core.clj:4327)</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left missing rimg slide woutline'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Unannotated vars</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Unannotated vars</h3>
+        
+        <p>The <code>core.typed</code> wiki says clojure.core has 120(!) unannotated vars,
+        including:</p>
+        
+        <p> <code>array-map</code>, <code>group-by</code>, <code>hash-map</code>, <code>line-seq</code>, <code>update-in</code></p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Practical use</h3>
+        
+        <p>Define some missing annotations ...</p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(ann ^:no-check clojure.core/line-seq&#x000A;    (Fn [Any -> (Seqable String)]))&#x000A;(ann ^:no-check clojure.java.io/reader&#x000A;    [Any -> Any])&#x000A;;; Because frequencies isn't annotated, we LIE!&#x000A;(ann ^:no-check clojure.core/frequencies&#x000A;     [(Seqable String)&#x000A;      -> (clojure.lang.APersistentMap String AnyInteger)])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Practical use</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(ann my-pw-shell-count&#x000A;    [String&#x000A;     -> (clojure.lang.APersistentMap String AnyInteger)])&#x000A;(defn my-pw-shell-count&#x000A;  "Count how many users have each shell"&#x000A;  [filename]&#x000A;  (->>&#x000A;   (line-seq (io/reader filename))&#x000A;   (remove (ann-form #(= \# (first %))&#x000A;                     [String -> Boolean]))&#x000A;   (map (ann-form&#x000A;         #(-> %&#x000A;              (s/split #":")&#x000A;              peek)&#x000A;         [String -> String]))&#x000A;   frequencies))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left rimg slide slow'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Leiningen plugin</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Leiningen plugin</h3>
+        
+        <p>The leiningen plugin is easy enough to use, but <code>check-ns</code> from the
+        repl is much faster for interactive development.</p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Leiningen plugin</h3>
+        
+        <p><textarea class='code' display='none' mode='sh'>% lein typed check&#x000A;Initializing core.typed ...&#x000A;Building core.typed base environments ...&#x000A;Finished building base environments&#x000A;"Elapsed time: 10274.326 msecs"&#x000A;core.typed initialized.&#x000A;Start collecting example&#x000A;Finished collecting example&#x000A;Collected 1 namespaces in 11158.178 msecs&#x000A;Start checking example&#x000A;Checked example in 628.301 msecs&#x000A;Checked 1 namespaces (approx. 46 lines)&#x000A; in 11791.741 msecs&#x000A;:ok</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='black full-background left lotsmore rimg slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>More to explore</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>More to explore</h2>
+        
+        <ul>
+        <li><a href="https://github.com/clojure/core.typed/wiki"><code>core.typed</code> wiki</a></li>
+        <li><a href="https://github.com/clojure/core.typed/wiki/clojure.core-Annotations"><code>core.typed</code> core annotations</a></li>
+        <li><a href="http://frenchy64.github.io/">Ambrose Bonnaire-Sergeant</a></li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>More to explore</h2>
+        
+        <ul>
+        <li><a href="http://nathanic.org/posts/2013/typed-clojure-tour/">Nathan Stien</a></li>
+        <li><a href="http://adambard.com/blog/core-typed-vs-haskell/">Adam Bard</a></li>
+        <li><a href="http://docs.racket-lang.org/ts-guide/index.html?q=typed">Typed Racket</a></li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='center full-background slide theend white'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Questions?</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <!-- deck.js navigation extension -->
+    <a class='deck-prev-link' href='#' title='Previous'>&#8592;</a>
+    <a class='deck-next-link' href='#' title='Next'>&#8594;</a>
+    <!-- deck.js hash extension -->
+    <a class='deck-permalink' href='.' title='Permalink to this slide'>#</a>
+    <!-- deck.js status extension -->
+    <p class='deck-status'>
+      <span class='deck-status-current'></span>
+      /
+      <span class='deck-status-total'></span>
+    </p>
+    <!-- jQuery & deck.js -->
+    <script src="deck.js/support/jquery.1.6.4.min.js" type="text/javascript"></script>
+    <script src="deck.js/core/deck.core.js" type="text/javascript"></script>
+    <!-- deck.js extension JS files -->
+    <script src="deck.js/extensions/codemirror/codemirror.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/deck.codemirror.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/clike/clike.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/clojure/clojure.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/coffeescript/coffeescript.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/css/css.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/diff/diff.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/haskell/haskell.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/lua/lua.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/php/php.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/plsql/plsql.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/python/python.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/r/r.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/rst/rst.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/ruby/ruby.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/scheme/scheme.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/smalltalk/smalltalk.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/sparql/sparql.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/stex/stex.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/velocity/velocity.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/xml/xml.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/xmlpure/xmlpure.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/yaml/yaml.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/goto/deck.goto.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/hash/deck.hash.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/menu/deck.menu.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/navigation/deck.navigation.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/scale/deck.scale.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/status/deck.status.js" type="text/javascript"></script>
+    <!-- your custom JS here, including call to initialize deck.js-codemirror -->
+    <script src="js/doc.js" type="text/javascript"></script>
+    <!-- Initialize the deck. -->
+    <script type='text/javascript'>
+      $(function() { $.deck('.slide'); });
+    </script>
+  </body>
+</html>

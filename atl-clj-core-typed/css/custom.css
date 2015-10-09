@@ -1,0 +1,60 @@
+.keydown.deck-container .slide.rimg .content {
+    width: 73%;
+}
+
+.keydown.deck-container .slide.rimg {
+    background-position: right center;
+    background-size: 250px 250px;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+}
+
+.keydown.deck-container .slide.limg .content {
+    margin-left: 28%;
+    width: 73%;
+}
+
+.keydown.deck-container .slide.limg {
+    background-size: 250px 250px;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+}
+
+.keydown.deck-container .slide.center {
+    background-position: center center;
+    background-size: 550px 550px;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+}
+
+.keydown.deck-container .slide.center .content {
+    display: table;
+    text-align: center;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.keydown.deck-container .slide.center .content h2 {
+    display:table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.keydown.deck-container .slide.blue .content h2 {
+    color: #00f;
+}
+
+.keydown.deck-container .slide.black .content h2 {
+    color: #000;
+}
+
+.keydown.deck-container .slide.woutline .content h2 {
+    -webkit-text-stroke: 1px #fff;
+}
+
+.keydown.deck-container .slide.white .content h2 {
+    color: #fff;
+    -webkit-text-stroke: 1px #000;
+}
+
