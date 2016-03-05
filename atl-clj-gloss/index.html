@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>gloss-talk</title>
+    <meta charset='utf-8'>
+    <meta content='width=1024, user-scalable=no' name='viewport'>
+    <!-- deck.js's core css -->
+    <link href="deck.js/core/deck.core.css" rel="stylesheet" type="text/css"/>
+    <!-- deck.js extension CSS files -->
+    <link href="deck.js/extensions/codemirror/deck.codemirror.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/goto/deck.goto.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/hash/deck.hash.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/menu/deck.menu.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/navigation/deck.navigation.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/scale/deck.scale.css" rel="stylesheet" type="text/css"/>
+    <link href="deck.js/extensions/status/deck.status.css" rel="stylesheet" type="text/css"/>
+    <!-- all css in the css dir: Keydown CSS, your custom CSS, and themes from deck.js -->
+    <link href="css/keydown.css" rel="stylesheet" type="text/css"/>
+    <link href="css/atl-clj-gloss.css" rel="stylesheet" type="text/css"/>
+    <link href="css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="css/horizontal-slide.css" rel="stylesheet" type="text/css"/>
+    <link href="css/swiss.css" rel="stylesheet" type="text/css"/>
+    <!-- Modernizr (provided for legacy browsers) -->
+    <script src="deck.js/support/modernizr.custom.js" type="text/javascript"></script>
+  </head>
+  <body class='deck-container keydown'>
+    <section class='slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h1>atl-clj <code>gloss</code></h1>
+        
+        <h2>ahobson@gmail.com</h2>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glossy left light slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>What is gloss?</h2>
+        
+        <ul>
+        <li><a href="https://github.com/ztellman/gloss">https://github.com/ztellman/gloss</a></li>
+        <li>A library for encoding and decoding raw bytes.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/sevenbrane' target='_blank'>sevenbrane</a>
+      </div>
+    </section>
+    <section class='full-background glossy left light slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>What is gloss?</h2>
+        
+        <ul>
+        <li>Useful for parsing network protocols and custom file formats.</li>
+        <li>I won't cover the full details in this presentation. The wiki page
+        is pretty good, but some functions are covered there. UTSL.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/sevenbrane' target='_blank'>sevenbrane</a>
+      </div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>DNS Concepts</h2>
+        
+        <ul>
+        <li>I'm going to cover gloss using the example of parsing and generating
+        DNS traffic.</li>
+        <li><a href="https://tools.ietf.org/html/rfc1035">https://tools.ietf.org/html/rfc1035</a></li>
+        <li>NOTE: Does not handle label compression, but I think it could.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>DNS Concepts</h2>
+        
+        <ul>
+        <li>NAME/QNAME: The name in DNS.</li>
+        <li>LABEL: Parts of a NAME (e.g. "foo", "example").</li>
+        <li>TYPE/QTYPE: Record Type / Query Type (e.g "A record" for IPv4).</li>
+        <li>TTL: Time To Live.</li>
+        <li>RDATA: Resource DATA descripting the RR, different depending on TYPE.</li>
+        <li>RR: Resource Record or "DNS Entry".</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='text'>;; NAME     TTL CLASS TYPE  RDATA&#x000A;foo.example 300 IN    A     10.2.3.4&#x000A;bar.example 300 IN    CNAME foo.example</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='frame full-background glow left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Concepts</h2>
+        
+        <ul>
+        <li>A byte format description is called a <code>frame</code>.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/jewellshoots' target='_blank'>jewellshoots</a>
+      </div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Concepts</h2>
+        
+        <ul>
+        <li>A byte format description is called a <code>frame</code>.</li>
+        <li>Compiling a <code>frame</code> with <code>compile-file</code> returns a <code>codec</code> that can
+        be used for encoding and decoding bytes.</li>
+        <li><code>defcodec</code> is a macro that calls <code>compile-frame</code>.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glow left primative slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Primitives</h2>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/oneras' target='_blank'>oneras</a>
+      </div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Primitives</h2>
+        
+        <ul>
+        <li>Primitive types: <code>:byte</code>, <code>:int16</code>, <code>:int32</code>, <code>:int64</code>, <code>:float32</code>,
+        <code>:float64</code>, <code>:ubyte</code>, <code>:uint16</code>, <code>:uint32</code>, and <code>:uint64</code>.</li>
+        <li>Big/Little Endian: e.g. <code>:int32-be</code> or <code>:int32-le</code>.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss encoding</h2>
+        
+        <ul>
+        <li>Gloss encodes to a sequence of <code>ByteBuffer</code>s.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gio/encode :uint32-be 0x01020304)&#x000A;(#object[java.nio.HeapByteBuffer 0x227330c&#x000A; "java.nio.HeapByteBuffer[pos=0 lim=4 cap=4]"])&#x000A;dns-clj.protocol> (defn gloss-inspect [a]&#x000A;                        (map #(vec (.array %)) a))&#x000A;dns-clj.protocol> (gloss-inspect&#x000A;                    (gio/encode :uint32-be 0x01020304))&#x000A;([1 2 3 4])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glow left slide strings'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Strings</h2>
+        
+        <ul>
+        <li>Requires specifying a character set.</li>
+        <li>Can have a static length, delimiters (or both).</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/ddrmaxgt37' target='_blank'>ddrmaxgt37</a>
+      </div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss Strings</h2>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec command (glc/string :utf-8))&#x000A;;; or maybe&#x000A;(defcodec short-command (glc/string :utf-8 :length 3))&#x000A;;; or maybe&#x000A;(defcodec line-command (glc/string :utf-8 :delimiters&#x000A;                                     ["\r" "\r\n"]))</textarea>
+    </p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gloss-inspect (gio/encode&#x000A;                                   command "foo"))&#x000A;([102 111 111])&#x000A;dns-clj.protocol> (gloss-inspect (gio/encode&#x000A;                                   short-command "foo"))&#x000A;([102 111 111])&#x000A;dns-clj.protocol> (gloss-inspect (gio/encode&#x000A;                                   line-command "foo"))&#x000A;([102 111 111] [13])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss decoding</h2>
+        
+        <ul>
+        <li>Gloss decodes anything that can be converted into a byte buffer.</li>
+        <li>Gloss wants to enforce that a codec consumes all input.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gio/decode short-command&#x000A;                    (byte-array [102 111 111 111]))&#x000A;Exception Bytes left over after decoding frame.&#x000A;  gloss.io/decode (io.clj:87)&#x000A;dns-clj.protocol> (gio/decode short-command&#x000A;                    (byte-array [102 111 111 111]) false)&#x000A;"foo"</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>enum</code></h2>
+        
+        <ul>
+        <li>Map values to symbols.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec qtypes&#x000A;  (glc/enum :uint16-be {:a 1&#x000A;                        :cname 5&#x000A;                        :any 255}))</textarea>
+    </p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gloss-inspect (gio/encode qtypes :a))&#x000A;([0 1])&#x000A;dns-clj.protocol> (gio/encode qtypes :a)&#x000A;(#object[java.nio.HeapByteBuffer 0x5baba097&#x000A;"java.nio.HeapByteBuffer[pos=0 lim=2 cap=2]"])&#x000A;&#x000A;dns-clj.protocol> (gio/decode qtypes *1)&#x000A;:a</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>DNS QNAME</h2>
+        
+        <ul>
+        <li>From <a href="https://tools.ietf.org/html/rfc1035#section-4.1.2">https://tools.ietf.org/html/rfc1035#section-4.1.2</a></li>
+        </ul>
+        
+        
+        <blockquote><p>a domain name represented as a sequence of labels, where each
+        label consists of a length octet followed by that number of
+        octets. The domain name terminates with the zero length octet for
+        the null label of the root. Note that this field may be an odd
+        number of octets; no padding is used.</p></blockquote>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='finite full-background glow left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>finite-frame</code></h2>
+        
+        <ul>
+        <li>A frame prefixed by its size.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/gadl' target='_blank'>gadl</a>
+      </div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>finite-frame</code></h2>
+        
+        <ul>
+        <li>A frame prefixed by its size.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec label&#x000A;  (glc/finite-frame :byte (glc/string :ascii)))</textarea>
+    </p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gloss-inspect (gio/encode label "foo"))&#x000A;([3] [102 111 111])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glow left repeated slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>repeated</code></h2>
+        
+        <ul>
+        <li>A dynamically sized sequence with either a prefix size or ending
+        delimiter(s).</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/bottspot' target='_blank'>bottspot</a>
+      </div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>repeated</code></h2>
+        
+        <ul>
+        <li>A dynamically sized sequence with either a prefix size or ending
+        delimiter(s).</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>(glc/repeated label :delimiters [(byte 0)])</textarea>
+    </p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gloss-inspect (gio/encode&#x000A;  (glc/repeated label :delimiters [(byte 0)])&#x000A;    ["foo" "example"]))&#x000A;([3] [102 111 111] [7] [101 120 97 109 112 108 101] [0])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glow left slide xform'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>compile-frame</code></h2>
+        
+        <ul>
+        <li>Takes an optional <code>pre-encoder</code> and <code>post-encoder</code> to transform the
+        data before/after encoding/decoding.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/tomswift' target='_blank'>tomswift</a>
+      </div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>compile-frame</code></h2>
+        
+        <ul>
+        <li>Takes an optional <code>pre-encoder</code> and <code>post-encoder</code> to transform the
+        data before/after encoding/decoding.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>;; assume these are defined&#x000A;(defn string->label-array [s] (str/split s #"\."))&#x000A;(defn label-array->string [a] (str/join "." a))&#x000A;&#x000A;(defcodec qname&#x000A;  (glc/compile-frame&#x000A;   (glc/repeated label :delimiters [(byte 0)])&#x000A;   string->label-array&#x000A;   label-array->string))</textarea>
+    </p>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.protocol> (gloss-inspect&#x000A;                    (gio/encode qname "foo.com"))&#x000A;([3] [102 111 111] [3] [99 111 109] [0])</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>DNS RR Format</h2>
+        
+        <ul>
+        <li>From <a href="https://tools.ietf.org/html/rfc1035#section-3.2.1">https://tools.ietf.org/html/rfc1035#section-3.2.1</a>
+        <textarea class='code' display='none' mode='text'>All RRs have the same top level format shown below:&#x000A;&#x000A;                                    1  1  1  1  1  1&#x000A;      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                                               |&#x000A;    /                                               /&#x000A;    /                      NAME                     /&#x000A;    |                                               |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                      TYPE                     |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                     CLASS                     |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                      TTL                      |&#x000A;    |                                               |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                   RDLENGTH                    |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--|&#x000A;    /                     RDATA                     /&#x000A;    /                                               /&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</textarea>
+    </li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='full-background glow left order slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>ordered-map</code></h2>
+        
+        <ul>
+        <li>Frames are by default encoded in a stable, but unspecified order.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+      <div class='attribution flickr'>
+        <a href='https://flickr.com/s_y_s' target='_blank'>s_y_s</a>
+      </div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>ordered-map</code></h2>
+        
+        <ul>
+        <li>Frames are by default encoded in a stable, but unspecified order.</li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec answer-class-ttl&#x000A;  (glc/ordered-map :name qname&#x000A;                   :type qtypes&#x000A;                   :class class-types&#x000A;                   :ttl :uint32-be))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>header</code></h2>
+        
+        <ul>
+        <li>A frame that defines the following frame.</li>
+        <li>Takes a frame, a function to return the following frame given the
+        parsed header, and then for encoding, a function that takes the data
+        and returns a header.</li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h2>Gloss <code>header</code></h2>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec rdata-a&#x000A;  (glc/finite-frame :uint16-be&#x000A;    (glc/ordered-map :address :uint32-be)))&#x000A;(defcodec rdata-c&#x000A;  (glc/finite-frame :uint16-be&#x000A;    (glc/ordered-map :cname qname)))&#x000A;(def answer-codecs&#x000A;  {:a     rdata-a&#x000A;   :cname rdata-c})&#x000A;;; Ignore `build-merge-header-with-data` for now&#x000A;(defcodec rrec&#x000A;  (glc/header&#x000A;    answer-class-ttl&#x000A;    (build-merge-header-with-data&#x000A;      (fn [h] (get answer-codecs (:type h))))&#x000A;    (fn [b]&#x000A;      (select-keys b [:name :type :class :ttl]))))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>DNS header section format</h3>
+        
+        <ul>
+        <li><a href="https://tools.ietf.org/html/rfc1035#section-4.1.1">https://tools.ietf.org/html/rfc1035#section-4.1.1</a></li>
+        </ul>
+        
+        
+        <p><textarea class='code' display='none' mode='text'>The header contains the following fields:&#x000A;&#x000A;                                    1  1  1  1  1  1&#x000A;      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                      ID                       |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                    QDCOUNT                    |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                    ANCOUNT                    |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                    NSCOUNT                    |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+&#x000A;    |                    ARCOUNT                    |&#x000A;    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Gloss <code>bit-map</code></h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(defcodec header&#x000A;  (glc/ordered-map :id :uint16-le&#x000A;                   :options (glc/bit-map :qr 1&#x000A;                                         :opcode 4&#x000A;                                         :aa 1&#x000A;                                         :tc 1&#x000A;                                         :rd 1&#x000A;                                         :ra 1&#x000A;                                         :z 3&#x000A;                                         :rcode 4)&#x000A;                   :qdcount :uint16-be&#x000A;                   :ancount :uint16-be&#x000A;                   :nscount :uint16-be&#x000A;                   :arcount :uint16-be))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Simple server using <code>aleph</code></h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>(def answer-db&#x000A;  {"foo.example" [{:type :a     :class :in :ttl 300&#x000A;                   :name "foo.example"&#x000A;                   :address 0x01020304}]&#x000A;   "bar.example" [{:type :cname :class :in :ttl 300&#x000A;                   :name "bar.example"&#x000A;                   :cname "foo.example"}]})&#x000A;;; ...&#x000A;&#x000A;(defn answerer&#x000A;  "Answer `msg` on manifold stream `s`."&#x000A;  [s msg]&#x000A;  (let [d (gio/decode dnsp/dns-msg (:message msg))&#x000A;        resp (build-response d)]&#x000A;    (ms/put! @s (assoc msg :message&#x000A;                  (gio/encode dnsp/dns-msg resp)))))</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='bigcode left slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Demo!</h3>
+        
+        <p><textarea class='code' display='none' mode='clojure'>dns-clj.core> (def svr (start-server 5399))&#x000A;#'dns-clj.core/svr&#x000A;;; Do some queries&#x000A;;; dig -p 5399 @127.0.0.1 foo.example&#x000A;;; dig -p 5399 @127.0.0.1 cname bar.example&#x000A;;;&#x000A;dns-clj.core> (ms/close! @svr)&#x000A;true</textarea>
+    </p>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <section class='slide'>
+      <div class='spacer top'></div>
+      <div class='content'>
+        <h3>Questions?</h3>
+        
+        <ul>
+        <li><a href="https://github.com/ahobson/dns-clj">https://github.com/ahobson/dns-clj</a></li>
+        <li><a href="https://ahobson.github.io/atl-clj-gloss">https://ahobson.github.io/atl-clj-gloss</a></li>
+        </ul>
+      </div>
+      <div class='spacer bottom'></div>
+    </section>
+    <!-- deck.js navigation extension -->
+    <a class='deck-prev-link' href='#' title='Previous'>&#8592;</a>
+    <a class='deck-next-link' href='#' title='Next'>&#8594;</a>
+    <!-- deck.js hash extension -->
+    <a class='deck-permalink' href='.' title='Permalink to this slide'>#</a>
+    <!-- deck.js status extension -->
+    <p class='deck-status'>
+      <span class='deck-status-current'></span>
+      /
+      <span class='deck-status-total'></span>
+    </p>
+    <!-- jQuery & deck.js -->
+    <script src="deck.js/support/jquery.1.6.4.min.js" type="text/javascript"></script>
+    <script src="deck.js/core/deck.core.js" type="text/javascript"></script>
+    <!-- deck.js extension JS files -->
+    <script src="deck.js/extensions/codemirror/codemirror.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/deck.codemirror.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/clike/clike.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/clojure/clojure.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/coffeescript/coffeescript.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/css/css.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/diff/diff.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/haskell/haskell.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/lua/lua.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/php/php.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/plsql/plsql.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/python/python.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/r/r.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/rst/rst.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/ruby/ruby.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/scheme/scheme.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/smalltalk/smalltalk.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/sparql/sparql.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/stex/stex.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/velocity/velocity.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/xml/xml.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/xmlpure/xmlpure.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/codemirror/mode/yaml/yaml.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/goto/deck.goto.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/hash/deck.hash.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/menu/deck.menu.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/navigation/deck.navigation.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/scale/deck.scale.js" type="text/javascript"></script>
+    <script src="deck.js/extensions/status/deck.status.js" type="text/javascript"></script>
+    <!-- your custom JS here, including call to initialize deck.js-codemirror -->
+    <script src="js/atl-clj-gloss.js" type="text/javascript"></script>
+    <!-- Initialize the deck. -->
+    <script type='text/javascript'>
+      $(function() { $.deck('.slide'); });
+    </script>
+  </body>
+</html>
